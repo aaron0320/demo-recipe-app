@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="recipe"
+            type="com.demo.simplecook.model.Recipe" />
+        <variable name="callback"
+            type="com.demo.simplecook.ui.listener.OnRecipeClickListener"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            android:onClick="@{ () -> callback.onRecipeClick(recipe) }">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:glide_src="@{ recipe.imageUrl }"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="Image"
+                    android:scaleType="centerCrop"
+                    android:layout_above="@id/recipe_info"
+                    android:src="@color/gray100"/>
+
+                <RelativeLayout
+                    android:id="@+id/recipe_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/white">
+                    <TextView
+                        android:id="@+id/label"
+                        android:text="@{ recipe.label }"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:singleLine="true"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:padding="8dp"
+                        android:paddingBottom="0dp"
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textSize="@dimen/item_recipe_textsize_primary"
+                        android:textStyle="bold"
+                        android:ellipsize="marquee" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_below="@id/label"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/diet_label_1"
+                            android:text="@{ recipe.dietLabels.size() > 0? recipe.dietLabels.get(0) : null }"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:textAppearance="?attr/textAppearanceListItem"
+                            android:ellipsize="end"
+                            android:textColor="@color/gray500"
+                            android:textSize="@dimen/item_recipe_textsize_secondary"/>
+                        <TextView
+                            android:id="@+id/diet_label_2"
+                            android:text="@{ recipe.dietLabels.size() > 1? recipe.dietLabels.get(1) : null}"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:textAppearance="?attr/textAppearanceListItem"
+                            android:ellipsize="end"
+                            android:textColor="@color/gray500"
+                            android:textSize="@dimen/item_recipe_textsize_secondary"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="match_parent"
+                                android:padding="3dp"
+                                android:src="@drawable/ic_timer"
+                                android:layout_gravity="center"
+                                android:scaleType="fitCenter"
+                                android:layout_marginRight="2dp"
+                                app:layout_constraintRight_toLeftOf="@id/guideline"/>
+                            <TextView
+                                android:id="@+id/time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:singleLine="true"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:textAppearance="?attr/textAppearanceListItem"
+                                android:ellipsize="marquee"
+                                android:textColor="@color/gray500"
+                                android:textSize="@dimen/item_recipe_textsize_secondary"
+                                app:layout_constraintLeft_toRightOf="@id/guideline"/>
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/guideline"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent="0.5"/>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

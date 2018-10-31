@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="prep_time_choice_array">
+        <item>10-30</item>
+        <item>31-60</item>
+        <item>61-90</item>
+        <item>91-120</item>
+        <item>121+</item>
+    </string-array>
+</resources>

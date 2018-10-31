@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="food_choice_array">
+        <item>Chicken</item>
+        <item>Pork</item>
+        <item>Fish</item>
+        <item>Beef</item>
+        <item>Vegetables</item>
+        <item>Sandwich</item>
+        <item>Rice</item>
+        <item>Noodles</item>
+        <item>Soup</item>
+        <item>Dessert</item>
+    </string-array>
+</resources>

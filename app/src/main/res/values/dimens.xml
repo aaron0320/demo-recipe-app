@@ -1,0 +1,20 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <!-- Recipe -->
+    <dimen name="item_recipe_textsize_primary">16sp</dimen>
+    <dimen name="item_recipe_textsize_secondary">14sp</dimen>
+
+    <!-- Recipe Details -->
+    <dimen name="recipe_details_textsize_primary">30sp</dimen>
+    <dimen name="recipe_details_textsize_secondary">17sp</dimen>
+    <dimen name="recipe_details_textsize_tertiary">14sp</dimen>
+    <dimen name="recipe_details_progress_bar_height">15sp</dimen>
+
+</resources>

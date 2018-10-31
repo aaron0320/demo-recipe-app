@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="diet_choice_array">
+        <item>balanced</item>
+        <item>high-protein</item>
+        <item>high-fiber</item>
+        <item>low-fat</item>
+        <item>low-carb</item>
+        <item>low-sodium</item>
+    </string-array>
+</resources>

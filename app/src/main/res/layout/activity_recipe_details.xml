@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="recipe"
+            type="com.demo.simplecook.model.Recipe"/>
+        <variable name="callback"
+            type="com.demo.simplecook.ui.listener.OnRecipeClickListener"/>
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:keepScreenOn="true"
+        android:background="@color/white"
+        android:padding="@dimen/activity_horizontal_margin"
+        tools:context=".ui.RecipeDetailsActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ recipe.label }"
+                android:textSize="@dimen/recipe_details_textsize_primary"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:maxLines="3"
+                android:gravity="center"
+                android:layout_marginRight="50dp" />
+
+            <ImageView
+                android:id="@+id/save_button"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_menu_save"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/label"
+                app:layout_constraintBottom_toBottomOf="@id/label"
+                app:layout_constraintLeft_toRightOf="@id/label"
+                android:onClick="@{() -> callback.onRecipeClick(recipe)}"/>
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="w,3:4"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toBottomOf="@id/label"
+                app:glide_src="@{ recipe.imageUrl }"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/nutrient_info_title"
+                android:text="@string/nutrient_info_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="@dimen/recipe_details_textsize_secondary"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                />
+            <TableLayout
+                android:id="@+id/nutrient_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/nutrient_info_title"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@{@string/nutrient_energy((int) (recipe.totalDailyNutrients.energyInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="@{@string/nutrient_fat((int) (recipe.totalDailyNutrients.fatInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ProgressBar
+                        android:id="@+id/energy_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.energyInfo.quantity / recipe.serveSize }"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/fat_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.fatInfo.quantity / recipe.serveSize }"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@{@string/nutrient_carbo((int) (recipe.totalDailyNutrients.carboInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="@{@string/nutrient_fibre((int) (recipe.totalDailyNutrients.fibreInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ProgressBar
+                        android:id="@+id/carbo_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.carboInfo.quantity / recipe.serveSize }"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/fibre_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.fibreInfo.quantity / recipe.serveSize }"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@{@string/nutrient_sugar((int) (recipe.totalDailyNutrients.sugarInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="@{@string/nutrient_protein((int) (recipe.totalDailyNutrients.proteinInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ProgressBar
+                        android:id="@+id/sugar_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.sugarInfo.quantity / recipe.serveSize }"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/protein_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.proteinInfo.quantity / recipe.serveSize }"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@{@string/nutrient_cholesterol((int) (recipe.totalDailyNutrients.cholesterolInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="@{@string/nutrient_sodium((int) (recipe.totalDailyNutrients.sodiumInfo.quantity / recipe.serveSize))}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="3dip" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ProgressBar
+                        android:id="@+id/cholesterol_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.cholesterolInfo.quantity / recipe.serveSize }"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/sodium_percent"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recipe_details_progress_bar_height"
+                        android:padding="4dp"
+                        android:progress="@{ recipe.totalDailyNutrients.sodiumInfo.quantity / recipe.serveSize }"
+                        />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/ingredient_info_title"
+                android:text="@{@string/ingredient_info_title(recipe.serveSize)}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="@dimen/recipe_details_textsize_secondary"
+                app:layout_constraintTop_toBottomOf="@id/nutrient_info"
+                />
+
+            <TextView
+                android:id="@+id/ingredient_info"
+                app:text_list="@{ recipe.ingredientLines }"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"
+                app:layout_constraintTop_toBottomOf="@id/ingredient_info_title"/>
+
+            <TextView
+                android:id="@+id/details_title"
+                android:text="@string/details_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="@dimen/recipe_details_textsize_secondary"
+                app:layout_constraintTop_toBottomOf="@id/ingredient_info"/>
+
+            <TextView
+                android:id="@+id/details"
+                android:text="@{ recipe.webUrl }"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"
+                android:autoLink="web"
+                app:layout_constraintTop_toBottomOf="@id/details_title"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>

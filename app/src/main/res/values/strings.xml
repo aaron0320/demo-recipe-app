@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Simple Cook</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="load_recipe_loading">Loading&#8230;</string>
+    <string name="load_recipe_no_result">No results</string>
+    <string name="load_recipe_error_general">Errors occurred</string>
+    <string name="load_recipe_error_exceed_limit">API limit exceeded (5 per minute)</string>
+
+    <string name="food_choice">Food&#9660;</string>
+    <string name="preparation_time_choice">Prep Time&#9660;</string>
+    <string name="diet_choice">Diet&#9660;</string>
+    <string name="time_not_applicable">N/A</string>
+    <string name="time_needed">%d Min</string>
+
+    <string name="title_activity_recipe_details">RecipeDetailsActivity</string>
+    <string name="nutrient_info_title">Daily Nutrient % (per serve)</string>
+    <string name="nutrient_energy">Energy: %d%%</string>
+    <string name="nutrient_fat">Fat: %d%%</string>
+    <string name="nutrient_carbo">Carbohydrate: %d%%</string>
+    <string name="nutrient_fibre">Fibre: %d%%</string>
+    <string name="nutrient_sugar">Sugar: %d%%</string>
+    <string name="nutrient_protein">Protein: %d%%</string>
+    <string name="nutrient_cholesterol">Cholesterol: %d%%</string>
+    <string name="nutrient_sodium">Sodium: %d%%</string>
+    <string name="ingredient_info_title">Ingredients (serve size: %.1f)</string>
+    <string name="details_title">Details</string>
+
+</resources>
