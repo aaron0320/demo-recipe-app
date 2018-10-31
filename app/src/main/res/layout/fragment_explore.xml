@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View"/>
-        <variable name="isLoading"
-            type="boolean" />
-        <variable name="isError"
-            type="boolean" />
+        <variable name="viewModel"
+            type="com.demo.simplecook.viewmodel.ExploreViewModel" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -74,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/options"
-            android:visibility="@{ isLoading ? View.VISIBLE : View.GONE }">
+            android:visibility="@{ viewModel.isLoading ? View.VISIBLE : View.GONE }">
         </include>
 
         <include layout="@layout/error_layout"
@@ -82,7 +81,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/options"
-            android:visibility="@{ isError ? View.VISIBLE : View.GONE }">
+            android:visibility="@{ viewModel.isError ? View.VISIBLE : View.GONE }"
+            bind:errorMsg="@{ viewModel.errorMsg }">
         </include>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -98,7 +98,7 @@
             app:layoutManager="LinearLayoutManager"
             tools:context=".ui.RecipeAdapter"
             tools:listitem="@layout/item_recipe"
-            android:visibility="@{ !isLoading &amp;&amp; !isError ? View.VISIBLE : View.GONE }"/>
+            android:visibility="@{ !viewModel.isLoading &amp;&amp; !viewModel.isError ? View.VISIBLE : View.GONE }"/>
 
     </RelativeLayout>
 </layout>

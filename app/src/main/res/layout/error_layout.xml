@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/retry_button"
             style="?android:attr/progressBarStyleLarge"
             android:src="@drawable/ic_refresh"
@@ -19,8 +19,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@id/guideline"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:onClick="@"/>
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"

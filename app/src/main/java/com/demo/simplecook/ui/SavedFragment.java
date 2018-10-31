@@ -3,6 +3,7 @@ package com.demo.simplecook.ui;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,13 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.demo.simplecook.R;
+import com.demo.simplecook.databinding.FragmentSavedBinding;
 
 public class SavedFragment extends Fragment {
     public static final String TAG = SavedFragment.class.getName();
-
     private static final String ARG_COLUMN_COUNT = "column-count";
 
     private int mColumnCount = 1;
+
+    private FragmentSavedBinding mBinding;
 
     public SavedFragment() {
     }
@@ -45,15 +48,13 @@ public class SavedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_saved, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_saved, container, false);
+        mBinding.setLifecycleOwner(this);
 
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            recyclerView.setAdapter(new SavedRecipeAdapter());
-        }
-        return view;
+        mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
+        mBinding.recyclerView.setAdapter(new SavedRecipeAdapter());
+
+        return mBinding.getRoot();
     }
 
 }

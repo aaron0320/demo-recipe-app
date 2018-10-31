@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
@@ -46,7 +47,9 @@ public class RecipeRepository {
 
     public LiveData<RecipeResultWrapper> getRemoteRecipes(String query, String time, String diet) {
         MutableLiveData<RecipeResultWrapper> remoteRecipes = new MutableLiveData<>();
-        mRemoteRecipeDataSource.getRecipes(query, time, diet)
+        // XXX - Consider returning the disposable to ViewModel
+        // In case when the MediatorLiveData remove this from the source, we can dispose this
+        Disposable disposable = mRemoteRecipeDataSource.getRecipes(query, time, diet)
             .subscribeOn(Schedulers.io())
             .subscribe((response) -> {
                 if (response.isSuccessful() && response.body().getHits() != null) {

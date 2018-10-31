@@ -24,7 +24,9 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".ui.RecipeDetailsActivity"
             android:parentActivityName=".ui.MainActivity"

@@ -20,6 +20,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProviders;
+import timber.log.Timber;
 
 import static com.demo.simplecook.ui.RecipeDetailsActivity.INTENT_KEY_RECIPE;
 
@@ -45,6 +46,8 @@ public class ExploreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container, false);
+        mBinding.setLifecycleOwner(this);
+
         mRecipeAdapter = new RecipeAdapter(getContext(), mOnRecipeClickListener);
         mBinding.recyclerView.setAdapter(mRecipeAdapter);
 
@@ -69,13 +72,7 @@ public class ExploreFragment extends Fragment {
         mBinding.dietChoiceSpinner.setSelection(0, false);
         mBinding.dietChoiceSpinner.setOnItemSelectedListener(mOnSpinnerSelectedListener);
 
-        mBinding.errorLayout.retryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                subscribeUI();
-            }
-        });
-
+        mBinding.errorLayout.retryButton.setOnClickListener((view) -> refreshUI());;
         return mBinding.getRoot();
     }
 
@@ -83,48 +80,37 @@ public class ExploreFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(ExploreViewModel.class);
+        ExploreViewModel.Factory factory = new ExploreViewModel.Factory(
+                getActivity().getApplication(),
+                mBinding.foodChoiceSpinner.getSelectedItem().toString(),
+                mBinding.prepTimeChoiceSpinner.getSelectedItem().toString(),
+                mBinding.dietChoiceSpinner.getSelectedItem().toString()
+        );
+        mViewModel = ViewModelProviders.of(this, factory).get(ExploreViewModel.class);
+        mBinding.setViewModel(mViewModel);
         subscribeUI();
     }
 
     private void subscribeUI() {
-        String query = mBinding.foodChoiceSpinner.getSelectedItem().toString();
-        String time = mBinding.prepTimeChoiceSpinner.getSelectedItem().toString();
-        String diet = mBinding.dietChoiceSpinner.getSelectedItem().toString();
-
-        mBinding.setIsLoading(true);
-        mBinding.setIsError(false);
-
-        // FIXME - Remove previous observer here
-        mViewModel.getRemoteRecipes(query, time, diet)
-                .observe(this, recipeResultWrapper -> {
+        mViewModel.getRemoteRecipes()
+                .observe(this, recipes -> {
                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                        if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() > 0) {
-                            mBinding.setIsLoading(false);
-                            mRecipeAdapter.setRecipes(recipeResultWrapper.getRecipes());
-                        } else if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() == 0) {
-                            mBinding.setIsLoading(false);
-                            mBinding.setIsError(true);
-                            mBinding.errorLayout.setErrorMsg(getString(R.string.load_recipe_no_result));
-                        } else {
-                            mBinding.setIsLoading(false);
-                            mBinding.setIsError(true);
-                            if (recipeResultWrapper.getCode() == 401) {
-                                mBinding.errorLayout.setErrorMsg(getString(R.string.load_recipe_error_exceed_limit));
-                            } else {
-                                mBinding.errorLayout.setErrorMsg(getString(R.string.load_recipe_error_general));
-                            }
-                        }
-                        mBinding.executePendingBindings();
+                        this.mRecipeAdapter.setRecipes(recipes);
                     }
                 });
+    }
+
+    private void refreshUI() {
+        mViewModel.refreshRemoteRecipes(mBinding.foodChoiceSpinner.getSelectedItem().toString(),
+                mBinding.prepTimeChoiceSpinner.getSelectedItem().toString(),
+                mBinding.dietChoiceSpinner.getSelectedItem().toString());
     }
 
     private AdapterView.OnItemSelectedListener mOnSpinnerSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                subscribeUI();
+                refreshUI();
             }
         }
 
@@ -132,14 +118,11 @@ public class ExploreFragment extends Fragment {
         public void onNothingSelected(AdapterView<?> adapterView) { }
     };
 
-    private OnRecipeClickListener mOnRecipeClickListener = new OnRecipeClickListener() {
-        @Override
-        public void onRecipeClick(Recipe recipe) {
+    private OnRecipeClickListener mOnRecipeClickListener = recipe -> {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                 Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
                 intent.putExtra(INTENT_KEY_RECIPE, recipe);
                 startActivity(intent);
             }
-        }
-    };
+        };
 }
