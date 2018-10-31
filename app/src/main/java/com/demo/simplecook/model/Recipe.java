@@ -8,20 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.room.Embedded;
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
-@Entity(tableName = "recipes",
-        indices = {
-            @Index("webUrl")
-        }
-)
 public class Recipe implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    private int dbId;
-
     @SerializedName("label")
     private String label;
     @SerializedName("image")
@@ -38,7 +25,6 @@ public class Recipe implements Parcelable {
     private List<String> ingredientLines;
     @SerializedName("totalTime")
     private float totalTime;
-    @Embedded
     @SerializedName("totalDaily")
     private NutrientList totalDailyNutrients;
 
@@ -56,7 +42,6 @@ public class Recipe implements Parcelable {
     }
 
     public Recipe(Parcel in) {
-        this.dbId = in.readInt();
         this.label = in.readString();
         this.imageUrl = in.readString();
         this.source = in.readString();
@@ -75,7 +60,6 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(dbId);
         dest.writeString(label);
         dest.writeString(imageUrl);
         dest.writeString(source);

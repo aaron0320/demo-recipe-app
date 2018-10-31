@@ -1,16 +1,10 @@
 package com.demo.simplecook.ui;
 
-import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Lifecycle;
-import timber.log.Timber;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.demo.simplecook.R;
@@ -36,14 +30,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         mBinding.setRecipe(getIntent().getParcelableExtra(INTENT_KEY_RECIPE));
-        mBinding.setCallback(mOnRecipeClickListener);
+        mBinding.setCallback(mOnSaveRecipeClickListener);
     }
 
-    OnRecipeClickListener mOnRecipeClickListener = new OnRecipeClickListener() {
+    OnRecipeClickListener mOnSaveRecipeClickListener = new OnRecipeClickListener() {
         @Override
         public void onRecipeClick(Recipe recipe) {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                Timber.e("Recipe click");
+                // TODO - Call viewmodel saveRecipe and listen to result
             }
         }
     };

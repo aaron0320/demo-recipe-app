@@ -20,6 +20,7 @@ public class RecipeDetailsViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> saveLocalRecipe(Recipe recipe) {
+        // TODO - No implementation of local DB yet
         return mRecipeRepository.saveLocalRecipe(recipe);
     }
 

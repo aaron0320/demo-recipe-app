@@ -11,11 +11,12 @@ public class LocalRecipeDataSource {
     private static LocalRecipeDataSource sInstance;
 
     private LocalRecipeDataSource() {
+        // TODO - Add dependency of AppDatabase object
     }
 
     public static LocalRecipeDataSource getInstance() {
         if (sInstance == null) {
-            synchronized (RemoteRecipeDataSource.class) {
+            synchronized (LocalRecipeDataSource.class) {
                 if (sInstance == null) {
                     sInstance = new LocalRecipeDataSource();
                 }
@@ -25,12 +26,12 @@ public class LocalRecipeDataSource {
     }
 
     public LiveData<List<Recipe>> getRecipes() {
-        // TODO
+        // TODO - Get Recipes from Database
         return null;
     }
 
     public Observable<Boolean> saveRecipe(Recipe recipe) {
-        // TODO
+        // TODO - Save Recipe to Database
         return null;
     }
 }

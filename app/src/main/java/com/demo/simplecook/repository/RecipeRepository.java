@@ -68,8 +68,8 @@ public class RecipeRepository {
     }
 
     public LiveData<Boolean> saveLocalRecipe(Recipe recipe) {
-        mLocalRecipeDataSource.saveRecipe(recipe);
-        // TODO
+        // TODO - Save recipe into mLocalRecipeDataSource
+        // TODO - Convert observable into live data and return to viewmodel
         return null;
     }
 

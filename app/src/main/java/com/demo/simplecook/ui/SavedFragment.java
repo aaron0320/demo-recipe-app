@@ -17,15 +17,13 @@ import com.demo.simplecook.R;
 public class SavedFragment extends Fragment {
     public static final String TAG = SavedFragment.class.getName();
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
+
     private int mColumnCount = 1;
 
     public SavedFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static SavedFragment newInstance(int columnCount) {
         SavedFragment fragment = new SavedFragment();
