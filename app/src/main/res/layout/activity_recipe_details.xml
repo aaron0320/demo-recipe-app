@@ -5,7 +5,9 @@
     <data>
         <variable name="recipe"
             type="com.demo.simplecook.model.Recipe"/>
-        <variable name="callback"
+        <variable name="saveRecipeClickCallback"
+        type="com.demo.simplecook.ui.listener.OnRecipeClickListener"/>
+        <variable name="deleteRecipeClickCallback"
             type="com.demo.simplecook.ui.listener.OnRecipeClickListener"/>
     </data>
 
@@ -43,7 +45,17 @@
                 app:layout_constraintTop_toTopOf="@id/label"
                 app:layout_constraintBottom_toBottomOf="@id/label"
                 app:layout_constraintLeft_toRightOf="@id/label"
-                android:onClick="@{() -> callback.onRecipeClick(recipe)}"/>
+                android:onClick="@{() -> saveRecipeClickCallback.onRecipeClick(recipe)}"/>
+            <ImageView
+                android:id="@+id/delete_button"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/label"
+                app:layout_constraintBottom_toBottomOf="@id/label"
+                app:layout_constraintLeft_toRightOf="@id/label"
+                android:onClick="@{() -> deleteRecipeClickCallback.onRecipeClick(recipe)}"/>
 
             <ImageView
                 android:id="@+id/image"

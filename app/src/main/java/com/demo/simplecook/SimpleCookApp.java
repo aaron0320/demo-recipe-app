@@ -3,9 +3,9 @@ package com.demo.simplecook;
 import android.app.Application;
 import android.util.Log;
 
-import com.bumptech.glide.annotation.GlideOption;
 import com.demo.simplecook.api.EdamamApiService;
 import com.demo.simplecook.api.EdamamRetrofitClient;
+import com.demo.simplecook.db.AppDataBase;
 import com.demo.simplecook.repository.LocalRecipeDataSource;
 import com.demo.simplecook.repository.RecipeRepository;
 import com.demo.simplecook.repository.RemoteRecipeDataSource;
@@ -24,15 +24,19 @@ public class SimpleCookApp extends Application {
         }
     }
 
-    public static RecipeRepository getRecipeRepository() {
+    public RecipeRepository getRecipeRepository() {
         return RecipeRepository.getInstance(
-                LocalRecipeDataSource.getInstance(),
+                LocalRecipeDataSource.getInstance(getAppDataBase()),
                 RemoteRecipeDataSource.getInstance(getEdamamApiService())
         );
     }
 
-    public static EdamamApiService getEdamamApiService() {
+    public EdamamApiService getEdamamApiService() {
         return EdamamRetrofitClient.getRetrofitInstance().create(EdamamApiService.class);
+    }
+
+    public AppDataBase getAppDataBase() {
+        return AppDataBase.getInstance(this);
     }
 
     /**
@@ -45,7 +49,7 @@ public class SimpleCookApp extends Application {
                 return;
             }
 
-            // FIXME - Integrate with external crash reporting service, e.g. Crashlytics
+            // TODO - Integrate with external crash reporting service, e.g. Crashlytics
 //            FakeCrashLibrary.log(priority, tag, message);
 //
 //            if (t != null) {

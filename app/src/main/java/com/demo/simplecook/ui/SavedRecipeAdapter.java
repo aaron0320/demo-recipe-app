@@ -10,25 +10,30 @@ import android.view.ViewGroup;
 import com.demo.simplecook.R;
 import com.demo.simplecook.databinding.ItemSavedRecipeBinding;
 import com.demo.simplecook.model.Recipe;
+import com.demo.simplecook.ui.listener.OnRecipeClickListener;
 
 import java.util.List;
 import java.util.Objects;
 
 public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.SavedRecipeViewHolder> {
+    private OnRecipeClickListener mOnRecipeClickListener;
 
     private List<Recipe> mSavedRecipes;
 
-    public SavedRecipeAdapter() {}
+    public SavedRecipeAdapter(OnRecipeClickListener onRecipeClickListener) {
+        this.mOnRecipeClickListener = onRecipeClickListener;
+    }
 
     @Override
     public SavedRecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemSavedRecipeBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_saved_recipe, parent, false);
+        binding.setCallback(mOnRecipeClickListener);
         return new SavedRecipeViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(final SavedRecipeViewHolder holder, int position) {
-        holder.mBinding.label.setText(mSavedRecipes.get(position).getLabel());
+        holder.mBinding.setRecipe(mSavedRecipes.get(position));
         holder.mBinding.executePendingBindings();
     }
 

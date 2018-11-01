@@ -18,20 +18,18 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import timber.log.Timber;
 
 public class ExploreViewModel extends AndroidViewModel {
     private Context mAppContext;
     private RecipeRepository mRecipeRepository;
 
-    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isError = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isLoadingMore = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isErrorLoadingMore = new MutableLiveData<>();
-    public MutableLiveData<String> errorMsg = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isGetRemoteRecipesLoading = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isGetRemoteRecipesError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isGetRemoteRecipesLoadingMore = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isGetRemoteRecipesErrorLoadingMore = new MutableLiveData<>();
+    public MutableLiveData<String> getRemoteRecipesErrorMsg = new MutableLiveData<>();
 
     private MediatorLiveData<List<Recipe>> mRemoteRecipesLiveData = new MediatorLiveData<>();
-
     private LiveData<RecipeResultWrapper> mRemoteRecipesSource;
 
     private int nextPageStartIndex = 0;
@@ -45,16 +43,16 @@ public class ExploreViewModel extends AndroidViewModel {
         mAppContext = application.getApplicationContext();
         mRecipeRepository = recipeRepository;
 
-        refreshRemoteRecipes(query, time, diet);
+        getInitialRemoteRecipes(query, time, diet);
     }
 
-    public void refreshRemoteRecipes(String query, String time, String diet) {
+    public void getInitialRemoteRecipes(String query, String time, String diet) {
         // Set Loading and Error to correct values
         nextPageStartIndex = 0;
-        isLoading.setValue(true);
-        isError.setValue(false);
-        isLoadingMore.setValue(false);
-        isErrorLoadingMore.setValue(false);
+        isGetRemoteRecipesLoading.setValue(true);
+        isGetRemoteRecipesError.setValue(false);
+        isGetRemoteRecipesLoadingMore.setValue(false);
+        isGetRemoteRecipesErrorLoadingMore.setValue(false);
 
         // Remove old source to avoid memory leak
         if (mRemoteRecipesSource != null) {
@@ -66,38 +64,38 @@ public class ExploreViewModel extends AndroidViewModel {
         // Listen to source and update live data
         mRemoteRecipesLiveData.addSource(mRemoteRecipesSource, (recipeResultWrapper) -> {
             if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() > 0) {
-                isLoading.setValue(false);
+                isGetRemoteRecipesLoading.setValue(false);
                 mRemoteRecipesLiveData.setValue(recipeResultWrapper.getRecipes());
                 nextPageStartIndex = recipeResultWrapper.getLastIndex();
             } else if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() == 0) {
-                errorMsg.setValue(mAppContext.getString(R.string.load_recipe_no_result));
-                isLoading.setValue(false);
-                isError.setValue(true);
+                getRemoteRecipesErrorMsg.setValue(mAppContext.getString(R.string.load_recipe_no_result));
+                isGetRemoteRecipesLoading.setValue(false);
+                isGetRemoteRecipesError.setValue(true);
             } else {
                 if (recipeResultWrapper.getCode() == 401) { // API Limit exceeded
-                    errorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_exceed_limit));
+                    getRemoteRecipesErrorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_exceed_limit));
                 } else {
-                    errorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_general));
+                    getRemoteRecipesErrorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_general));
                 }
-                isLoading.setValue(false);
-                isError.setValue(true);
+                isGetRemoteRecipesLoading.setValue(false);
+                isGetRemoteRecipesError.setValue(true);
             }
         });
     }
 
-    public void getNextPageRemoteRecipes(String query, String time, String diet) {
+    public void getMoreRemoteRecipes(String query, String time, String diet) {
         // If Loading is in progress, disable getting next page
         // If Error is showing, disable getting next page, unless user click retry button
-        if (isLoading.getValue() != null && isLoading.getValue() ||
-                isLoadingMore.getValue() != null && isLoadingMore.getValue() ||
-                isError.getValue() != null && isError.getValue() ||
-                isErrorLoadingMore.getValue() != null && isErrorLoadingMore.getValue()) {
+        if (isGetRemoteRecipesLoading.getValue() != null && isGetRemoteRecipesLoading.getValue() ||
+                isGetRemoteRecipesLoadingMore.getValue() != null && isGetRemoteRecipesLoadingMore.getValue() ||
+                isGetRemoteRecipesError.getValue() != null && isGetRemoteRecipesError.getValue() ||
+                isGetRemoteRecipesErrorLoadingMore.getValue() != null && isGetRemoteRecipesErrorLoadingMore.getValue()) {
             return;
         }
 
         // Set Loading and Error to correct values
-        isLoadingMore.setValue(true);
-        isErrorLoadingMore.setValue(false);
+        isGetRemoteRecipesLoadingMore.setValue(true);
+        isGetRemoteRecipesErrorLoadingMore.setValue(false);
 
         // Remove old source to avoid memory leak
         if (mRemoteRecipesSource != null) {
@@ -109,7 +107,7 @@ public class ExploreViewModel extends AndroidViewModel {
         // Listen to source and update live data
         mRemoteRecipesLiveData.addSource(mRemoteRecipesSource, (recipeResultWrapper) -> {
             if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() > 0) {
-                isLoadingMore.setValue(false);
+                isGetRemoteRecipesLoadingMore.setValue(false);
 
                 // If original LiveData is not null, add new data
                 if (mRemoteRecipesLiveData.getValue() != null) {
@@ -120,17 +118,17 @@ public class ExploreViewModel extends AndroidViewModel {
                 // Update next page start index
                 nextPageStartIndex = recipeResultWrapper.getLastIndex();
             } else if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() == 0) {
-                errorMsg.setValue(mAppContext.getString(R.string.load_recipe_no_result));
-                isLoadingMore.setValue(false);
-                isErrorLoadingMore.setValue(true);
+                getRemoteRecipesErrorMsg.setValue(mAppContext.getString(R.string.load_recipe_no_result));
+                isGetRemoteRecipesLoadingMore.setValue(false);
+                isGetRemoteRecipesErrorLoadingMore.setValue(true);
             } else {
                 if (recipeResultWrapper.getCode() == 401) { // API Limit exceeded
-                    errorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_exceed_limit));
+                    getRemoteRecipesErrorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_exceed_limit));
                 } else {
-                    errorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_general));
+                    getRemoteRecipesErrorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_general));
                 }
-                isLoadingMore.setValue(false);
-                isErrorLoadingMore.setValue(true);
+                isGetRemoteRecipesLoadingMore.setValue(false);
+                isGetRemoteRecipesErrorLoadingMore.setValue(true);
             }
         });
     }
@@ -155,7 +153,7 @@ public class ExploreViewModel extends AndroidViewModel {
             mQuery = query;
             mTime = time;
             mDiet = diet;
-            mRepository = SimpleCookApp.getRecipeRepository();
+            mRepository = ((SimpleCookApp) application).getRecipeRepository();
         }
 
         @Override

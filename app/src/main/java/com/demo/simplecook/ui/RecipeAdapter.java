@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.demo.simplecook.R;
 import com.demo.simplecook.databinding.ItemRecipeBinding;
 import com.demo.simplecook.model.Recipe;
@@ -20,14 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
-    private Context mAppContext;
-
     private OnRecipeClickListener mOnRecipeClickListener;
 
     private List<Recipe> mRecipes;
 
-    public RecipeAdapter(Context context, OnRecipeClickListener onRecipeClickListener) {
-        this.mAppContext = context.getApplicationContext();
+    public RecipeAdapter(OnRecipeClickListener onRecipeClickListener) {
         this.mOnRecipeClickListener = onRecipeClickListener;
     }
 
@@ -41,13 +37,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public void onBindViewHolder(final RecipeViewHolder holder, int position) {
         holder.mBinding.setRecipe(mRecipes.get(position));
-
-        int totalTimeInt = (int) mRecipes.get(position).getTotalTime();
-        if (mRecipes.get(position).getTotalTime() == 0) {
-            holder.mBinding.time.setText(R.string.time_not_applicable);
-        } else {
-            holder.mBinding.time.setText(mAppContext.getString(R.string.time_needed, totalTimeInt));
-        }
         holder.mBinding.executePendingBindings();
     }
 

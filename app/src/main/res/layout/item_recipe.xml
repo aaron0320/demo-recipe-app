@@ -114,6 +114,7 @@
                                 android:ellipsize="marquee"
                                 android:textColor="@color/gray500"
                                 android:textSize="@dimen/item_recipe_textsize_secondary"
+                                app:recipe_time="@{ recipe.totalTime }"
                                 app:layout_constraintLeft_toRightOf="@id/guideline"/>
 
                             <androidx.constraintlayout.widget.Guideline

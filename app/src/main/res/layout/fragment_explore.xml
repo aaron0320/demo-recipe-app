@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/options"
-            android:visibility="@{ viewModel.isLoading ? View.VISIBLE : View.GONE }">
+            android:visibility="@{ safeUnbox(viewModel.isGetRemoteRecipesLoading) ? View.VISIBLE : View.GONE }">
         </include>
 
         <include layout="@layout/error_layout"
@@ -84,8 +84,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/options"
-            android:visibility="@{ viewModel.isError ? View.VISIBLE : View.GONE }"
-            bind:errorMsg="@{ viewModel.errorMsg }"
+            android:visibility="@{ safeUnbox(viewModel.isGetRemoteRecipesError) ? View.VISIBLE : View.GONE }"
+            bind:errorMsg="@{ viewModel.getRemoteRecipesErrorMsg }"
             bind:retryCallBack="@{ retryRefreshCallBack }">
         </include>
 
@@ -102,7 +102,7 @@
                 android:layout_height="match_parent"
                 tools:context=".ui.RecipeAdapter"
                 tools:listitem="@layout/item_recipe"
-                android:visibility="@{ !viewModel.isLoading &amp;&amp; !viewModel.isError ? View.VISIBLE : View.GONE }"/>
+                android:visibility="@{ !safeUnbox(viewModel.isGetRemoteRecipesLoading) &amp;&amp; !safeUnbox(viewModel.isGetRemoteRecipesError) ? View.VISIBLE : View.GONE }"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </RelativeLayout>

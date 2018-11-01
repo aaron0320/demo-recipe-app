@@ -11,9 +11,13 @@
     <dimen name="item_recipe_textsize_primary">16sp</dimen>
     <dimen name="item_recipe_textsize_secondary">14sp</dimen>
 
+    <!-- Saved Recipe -->
+    <dimen name="item_saved_recipe_textsize_primary">14sp</dimen>
+    <dimen name="item_saved_recipe_textsize_secondary">12sp</dimen>
+
     <!-- Recipe Details -->
-    <dimen name="recipe_details_textsize_primary">30sp</dimen>
-    <dimen name="recipe_details_textsize_secondary">17sp</dimen>
+    <dimen name="recipe_details_textsize_primary">28sp</dimen>
+    <dimen name="recipe_details_textsize_secondary">16sp</dimen>
     <dimen name="recipe_details_textsize_tertiary">14sp</dimen>
     <dimen name="recipe_details_progress_bar_height">15sp</dimen>
 

@@ -1,0 +1,219 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "6118607ea26f6f345bdf19cd59ab6cad",
+    "entities": [
+      {
+        "tableName": "recipes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`webUrl` TEXT NOT NULL, `label` TEXT, `imageUrl` TEXT, `source` TEXT, `serveSize` REAL NOT NULL, `dietLabels` TEXT, `ingredientLines` TEXT, `totalTime` REAL NOT NULL, `energylabel` TEXT, `energyquantity` REAL, `energyunit` TEXT, `fatlabel` TEXT, `fatquantity` REAL, `fatunit` TEXT, `carbolabel` TEXT, `carboquantity` REAL, `carbounit` TEXT, `fibrelabel` TEXT, `fibrequantity` REAL, `fibreunit` TEXT, `sugarlabel` TEXT, `sugarquantity` REAL, `sugarunit` TEXT, `proteinlabel` TEXT, `proteinquantity` REAL, `proteinunit` TEXT, `cholesterollabel` TEXT, `cholesterolquantity` REAL, `cholesterolunit` TEXT, `sodiumlabel` TEXT, `sodiumquantity` REAL, `sodiumunit` TEXT, PRIMARY KEY(`webUrl`))",
+        "fields": [
+          {
+            "fieldPath": "webUrl",
+            "columnName": "webUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "serveSize",
+            "columnName": "serveSize",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dietLabels",
+            "columnName": "dietLabels",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingredientLines",
+            "columnName": "ingredientLines",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalTime",
+            "columnName": "totalTime",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalDailyNutrients.energyInfo.label",
+            "columnName": "energylabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.energyInfo.quantity",
+            "columnName": "energyquantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.energyInfo.unit",
+            "columnName": "energyunit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.fatInfo.label",
+            "columnName": "fatlabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.fatInfo.quantity",
+            "columnName": "fatquantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.fatInfo.unit",
+            "columnName": "fatunit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.carboInfo.label",
+            "columnName": "carbolabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.carboInfo.quantity",
+            "columnName": "carboquantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.carboInfo.unit",
+            "columnName": "carbounit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.fibreInfo.label",
+            "columnName": "fibrelabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.fibreInfo.quantity",
+            "columnName": "fibrequantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.fibreInfo.unit",
+            "columnName": "fibreunit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.sugarInfo.label",
+            "columnName": "sugarlabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.sugarInfo.quantity",
+            "columnName": "sugarquantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.sugarInfo.unit",
+            "columnName": "sugarunit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.proteinInfo.label",
+            "columnName": "proteinlabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.proteinInfo.quantity",
+            "columnName": "proteinquantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.proteinInfo.unit",
+            "columnName": "proteinunit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.cholesterolInfo.label",
+            "columnName": "cholesterollabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.cholesterolInfo.quantity",
+            "columnName": "cholesterolquantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.cholesterolInfo.unit",
+            "columnName": "cholesterolunit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.sodiumInfo.label",
+            "columnName": "sodiumlabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.sodiumInfo.quantity",
+            "columnName": "sodiumquantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDailyNutrients.sodiumInfo.unit",
+            "columnName": "sodiumunit",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "webUrl"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6118607ea26f6f345bdf19cd59ab6cad\")"
+    ]
+  }
+}

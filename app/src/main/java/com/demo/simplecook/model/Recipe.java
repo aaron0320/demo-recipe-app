@@ -3,37 +3,54 @@ package com.demo.simplecook.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.demo.simplecook.db.converter.StringListConverter;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+@Entity(tableName = "recipes")
 public class Recipe implements Parcelable {
+    @PrimaryKey()
+    @SerializedName("url")
+    @NonNull
+    private String webUrl;
     @SerializedName("label")
     private String label;
     @SerializedName("image")
     private String imageUrl;
     @SerializedName("source")
     private String source;
-    @SerializedName("url")
-    private String webUrl;
     @SerializedName("yield")
     private float serveSize;
+    @TypeConverters(StringListConverter.class)
     @SerializedName("dietLabels")
     private List<String> dietLabels;
+    @TypeConverters(StringListConverter.class)
     @SerializedName("ingredientLines")
     private List<String> ingredientLines;
     @SerializedName("totalTime")
     private float totalTime;
+    @Embedded
     @SerializedName("totalDaily")
     private NutrientList totalDailyNutrients;
 
-    public Recipe(String label, String imageUrl, String source, String webUrl, float serveSize, List<String> dietLabels,
+    public Recipe() { this.webUrl = ""; }
+
+    @Ignore
+    public Recipe(String webUrl, String label, String imageUrl, String source, float serveSize, List<String> dietLabels,
                   List<String> ingredientLines, float totalTime, NutrientList totalDailyNutrients) {
+        this.webUrl = webUrl;
         this.label = label;
         this.imageUrl = imageUrl;
         this.source = source;
-        this.webUrl = webUrl;
         this.serveSize = serveSize;
         this.dietLabels = dietLabels;
         this.ingredientLines = ingredientLines;
@@ -41,11 +58,12 @@ public class Recipe implements Parcelable {
         this.totalDailyNutrients = totalDailyNutrients;
     }
 
+    @Ignore
     public Recipe(Parcel in) {
+        this.webUrl = in.readString();
         this.label = in.readString();
         this.imageUrl = in.readString();
         this.source = in.readString();
-        this.webUrl = in.readString();
         this.serveSize = in.readFloat();
         this.dietLabels = new ArrayList<>();
         in.readStringList(this.dietLabels);
@@ -60,10 +78,10 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(webUrl);
         dest.writeString(label);
         dest.writeString(imageUrl);
         dest.writeString(source);
-        dest.writeString(webUrl);
         dest.writeFloat(serveSize);
         dest.writeStringList(dietLabels);
         dest.writeStringList(ingredientLines);
@@ -80,6 +98,14 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
+
+    public String getWebUrl() {
+        return webUrl;
+    }
+
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
+    }
 
     public String getLabel() {
         return label;
@@ -103,14 +129,6 @@ public class Recipe implements Parcelable {
 
     public void setSource(String source) {
         this.source = source;
-    }
-
-    public String getWebUrl() {
-        return webUrl;
-    }
-
-    public void setWebUrl(String webUrl) {
-        this.webUrl = webUrl;
     }
 
     public float getServeSize() {

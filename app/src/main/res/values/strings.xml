@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Simple Cook</string>
 
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Main Page</string>
     <string name="action_settings">Settings</string>
 
     <string name="load_recipe_loading">Loading&#8230;</string>
@@ -9,6 +9,7 @@
     <string name="load_recipe_error_general">Loading failed</string>
     <string name="load_recipe_error_exceed_limit">API limit exceeded (5 per minute)</string>
     <string name="retry">Retry</string>
+    <string name="load_local_recipe_no_result">No saved recipe</string>
 
     <string name="food_choice">Food&#9660;</string>
     <string name="preparation_time_choice">Prep Time&#9660;</string>
@@ -16,7 +17,7 @@
     <string name="time_not_applicable">N/A</string>
     <string name="time_needed">%d Min</string>
 
-    <string name="title_activity_recipe_details">RecipeDetailsActivity</string>
+    <string name="title_activity_recipe_details">Recipe Details</string>
     <string name="nutrient_info_title">Daily Nutrient % (per serve)</string>
     <string name="nutrient_energy">Energy: %d%%</string>
     <string name="nutrient_fat">Fat: %d%%</string>
@@ -28,5 +29,9 @@
     <string name="nutrient_sodium">Sodium: %d%%</string>
     <string name="ingredient_info_title">Ingredients (serve size: %.1f)</string>
     <string name="details_title">Details</string>
+    <string name="save_recipe_success">Save success!</string>
+    <string name="save_recipe_failed">Save failed, please retry</string>
+    <string name="delete_recipe_success">Delete success!</string>
+    <string name="delete_recipe_failed">Delete failed, please retry</string>
 
 </resources>

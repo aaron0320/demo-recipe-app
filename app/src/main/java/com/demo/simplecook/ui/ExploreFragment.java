@@ -22,14 +22,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import timber.log.Timber;
 
 import static com.demo.simplecook.ui.RecipeDetailsActivity.INTENT_KEY_RECIPE;
 
 public class ExploreFragment extends Fragment {
     public static final String TAG = ExploreFragment.class.getName();
-    public static final int RECYCLER_VIEW_LOAD_THRESHOLD = 3;
+    public static final int RECYCLER_VIEW_LOAD_THRESHOLD = 5;
 
     private FragmentExploreBinding mBinding;
     private RecipeAdapter mRecipeAdapter;
@@ -50,9 +48,9 @@ public class ExploreFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container, false);
         mBinding.setLifecycleOwner(this);
-        mBinding.setRetryRefreshCallBack(mOnRetryRefreshListener);
+        mBinding.setRetryRefreshCallBack(mOnRetryLoadInitListener);
 
-        mRecipeAdapter = new RecipeAdapter(getContext(), mOnRecipeClickListener);
+        mRecipeAdapter = new RecipeAdapter(mOnRecipeClickListener);
         mBinding.recyclerView.setAdapter(mRecipeAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mBinding.recyclerView.setLayoutManager(linearLayoutManager);
@@ -110,7 +108,7 @@ public class ExploreFragment extends Fragment {
                     }
                 });
 
-        mViewModel.isErrorLoadingMore.
+        mViewModel.isGetRemoteRecipesErrorLoadingMore.
                 observe(this, isErrorLoadingMore -> {
                     // Reset existing snackbar
                     if (mErrorSnackbar != null && mErrorSnackbar.isShown()) {
@@ -120,21 +118,21 @@ public class ExploreFragment extends Fragment {
                     // Create new snack bar if error is true
                     if (isErrorLoadingMore) {
                         mErrorSnackbar = Snackbar.make(mBinding.recyclerViewWrapper,
-                                mViewModel.errorMsg.getValue(), Snackbar.LENGTH_INDEFINITE);
-                        mErrorSnackbar.setAction(R.string.retry, mOnRetryLoadNextPageListener);
+                                mViewModel.getRemoteRecipesErrorMsg.getValue(), Snackbar.LENGTH_INDEFINITE);
+                        mErrorSnackbar.setAction(R.string.retry, mOnRetryLoadMoreListener);
                         mErrorSnackbar.show();
                     }
                 });
     }
 
-    private void refreshParams() {
-        mViewModel.refreshRemoteRecipes(mBinding.foodChoiceSpinner.getSelectedItem().toString(),
+    private void loadInitialPage() {
+        mViewModel.getInitialRemoteRecipes(mBinding.foodChoiceSpinner.getSelectedItem().toString(),
                 mBinding.prepTimeChoiceSpinner.getSelectedItem().toString(),
                 mBinding.dietChoiceSpinner.getSelectedItem().toString());
     }
 
     private void loadNextPage() {
-        mViewModel.getNextPageRemoteRecipes(mBinding.foodChoiceSpinner.getSelectedItem().toString(),
+        mViewModel.getMoreRemoteRecipes(mBinding.foodChoiceSpinner.getSelectedItem().toString(),
                 mBinding.prepTimeChoiceSpinner.getSelectedItem().toString(),
                 mBinding.dietChoiceSpinner.getSelectedItem().toString());
     }
@@ -143,7 +141,7 @@ public class ExploreFragment extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                refreshParams();
+                loadInitialPage();
             }
         }
 
@@ -159,12 +157,12 @@ public class ExploreFragment extends Fragment {
         }
     };
 
-    private View.OnClickListener mOnRetryRefreshListener = (view) -> {
-        refreshParams();
+    private View.OnClickListener mOnRetryLoadInitListener = (view) -> {
+        loadInitialPage();
     };
 
-    private View.OnClickListener mOnRetryLoadNextPageListener = (view) -> {
-        mViewModel.isErrorLoadingMore.setValue(false);
+    private View.OnClickListener mOnRetryLoadMoreListener = (view) -> {
+        mViewModel.isGetRemoteRecipesErrorLoadingMore.setValue(false);
         loadNextPage();
     };
 }

@@ -52,7 +52,7 @@ public class RecipeRepository {
         // In case when the MediatorLiveData remove this from the source, we can dispose this
         Disposable disposable = mRemoteRecipeDataSource.getRecipes(query, time, diet, nextPageStartIndex)
             .subscribeOn(Schedulers.io())
-            .subscribe((response) -> {
+            .subscribe(response -> {
                 if (response.isSuccessful() && response.body().getHits() != null) {
                     // XXX - Write Custom Gson mapper to handle this
                     List<Recipe> recipes = new ArrayList<>();
@@ -71,13 +71,34 @@ public class RecipeRepository {
         return remoteRecipes;
     }
 
-    public LiveData<Boolean> saveLocalRecipe(Recipe recipe) {
-        // TODO - Save recipe into mLocalRecipeDataSource
-        // TODO - Convert observable into live data and return to viewmodel
-        return null;
-    }
-
     public LiveData<List<Recipe>> getLocalRecipes() {
         return mLocalRecipeDataSource.getRecipes();
     }
+
+    public LiveData<Recipe> getLocalRecipe(String webUrl) {
+        return mLocalRecipeDataSource.getRecipe(webUrl);
+    }
+
+    public LiveData<Boolean> saveLocalRecipe(Recipe recipe) {
+        MutableLiveData<Boolean> saveResult = new MutableLiveData<>();
+        Disposable disposable = mLocalRecipeDataSource.saveRecipe(recipe)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        response -> saveResult.postValue(response),
+                        throwable -> saveResult.postValue(false)
+                );
+        return saveResult;
+    }
+
+    public LiveData<Boolean> deleteLocalRecipe(Recipe recipe) {
+        MutableLiveData<Boolean> deleteResult = new MutableLiveData<>();
+        Disposable disposable = mLocalRecipeDataSource.deleteRecipe(recipe)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        response -> deleteResult.postValue(response),
+                        throwable -> deleteResult.postValue(false)
+                );
+        return deleteResult;
+    }
+
 }

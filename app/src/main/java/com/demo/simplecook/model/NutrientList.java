@@ -4,21 +4,33 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
+
 public class NutrientList implements Parcelable {
+    @Embedded(prefix = "energy")
     @SerializedName("ENERC_KCAL")
     private NutrientInfo energyInfo;
+    @Embedded(prefix = "fat")
     @SerializedName("FAT")
     private NutrientInfo fatInfo;
+    @Embedded(prefix = "carbo")
     @SerializedName("CHOCDF")
     private NutrientInfo carboInfo;
+    @Embedded(prefix = "fibre")
     @SerializedName("FIBTG")
     private NutrientInfo fibreInfo;
+    @Embedded(prefix = "sugar")
     @SerializedName("SUGAR")
     private NutrientInfo sugarInfo;
+    @Embedded(prefix = "protein")
     @SerializedName("PROCNT")
     private NutrientInfo proteinInfo;
+    @Embedded(prefix = "cholesterol")
     @SerializedName("CHOLE")
     private NutrientInfo cholesterolInfo;
+    @Embedded(prefix = "sodium")
     @SerializedName("NA")
     private NutrientInfo sodiumInfo;
 
