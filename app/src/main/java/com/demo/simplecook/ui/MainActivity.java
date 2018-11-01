@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         mBinding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mBinding.navViewPager.setAdapter(new NavPagerAdapter(getSupportFragmentManager()));
         mBinding.navViewPager.addOnPageChangeListener(mOnPageChangeListener);
+        mBinding.navViewPager.setOffscreenPageLimit(NUM_DRAWER_PAGER_ITEMS - 1);
     }
 
     // XXX - Find a better way to bind the two listeners below
