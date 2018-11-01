@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View"/>
         <variable name="viewModel"
             type="com.demo.simplecook.viewmodel.ExploreViewModel" />
+        <variable name="retryRefreshCallBack"
+            type="android.view.View.OnClickListener"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
 
         <TableLayout
             android:id="@+id/options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:stretchColumns="*">
             <TableRow
                 android:layout_width="match_parent"
@@ -82,22 +85,25 @@
             android:layout_height="match_parent"
             android:layout_below="@id/options"
             android:visibility="@{ viewModel.isError ? View.VISIBLE : View.GONE }"
-            bind:errorMsg="@{ viewModel.errorMsg }">
+            bind:errorMsg="@{ viewModel.errorMsg }"
+            bind:retryCallBack="@{ retryRefreshCallBack }">
         </include>
 
-        <androidx.recyclerview.widget.RecyclerView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/recycler_view"
-            android:name="com.demo.simplecook.ui.ExploreFragment"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/recycler_view_wrapper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_below="@id/options"
-            tools:context=".ui.RecipeAdapter"
-            tools:listitem="@layout/item_recipe"
-            android:visibility="@{ !viewModel.isLoading &amp;&amp; !viewModel.isError ? View.VISIBLE : View.GONE }"/>
+            android:layout_below="@id/options">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:name="com.demo.simplecook.ui.ExploreFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".ui.RecipeAdapter"
+                tools:listitem="@layout/item_recipe"
+                android:visibility="@{ !viewModel.isLoading &amp;&amp; !viewModel.isError ? View.VISIBLE : View.GONE }"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </RelativeLayout>
 </layout>

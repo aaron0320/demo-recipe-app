@@ -6,8 +6,9 @@
 
     <string name="load_recipe_loading">Loading&#8230;</string>
     <string name="load_recipe_no_result">No results</string>
-    <string name="load_recipe_error_general">Errors occurred</string>
+    <string name="load_recipe_error_general">Loading failed</string>
     <string name="load_recipe_error_exceed_limit">API limit exceeded (5 per minute)</string>
+    <string name="retry">Retry</string>
 
     <string name="food_choice">Food&#9660;</string>
     <string name="preparation_time_choice">Prep Time&#9660;</string>

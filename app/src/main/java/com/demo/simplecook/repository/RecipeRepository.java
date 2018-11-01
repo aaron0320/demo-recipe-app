@@ -50,7 +50,6 @@ public class RecipeRepository {
         MutableLiveData<RecipeResultWrapper> remoteRecipes = new MutableLiveData<>();
         // XXX - Consider returning the disposable to ViewModel
         // In case when the MediatorLiveData remove this from the source, we can dispose this
-        Timber.e("getRemoteRecipes startIndex %d", nextPageStartIndex);
         Disposable disposable = mRemoteRecipeDataSource.getRecipes(query, time, diet, nextPageStartIndex)
             .subscribeOn(Schedulers.io())
             .subscribe((response) -> {

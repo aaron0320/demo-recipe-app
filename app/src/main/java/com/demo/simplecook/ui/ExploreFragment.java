@@ -13,6 +13,7 @@ import com.demo.simplecook.databinding.FragmentExploreBinding;
 import com.demo.simplecook.ui.listener.EndlessRecyclerViewScrollListener;
 import com.demo.simplecook.ui.listener.OnRecipeClickListener;
 import com.demo.simplecook.viewmodel.ExploreViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import timber.log.Timber;
 
 import static com.demo.simplecook.ui.RecipeDetailsActivity.INTENT_KEY_RECIPE;
 
@@ -33,6 +35,8 @@ public class ExploreFragment extends Fragment {
     private RecipeAdapter mRecipeAdapter;
 
     private ExploreViewModel mViewModel;
+
+    private Snackbar mErrorSnackbar;
 
     public static ExploreFragment newInstance() {
         ExploreFragment fragment = new ExploreFragment();
@@ -46,6 +50,7 @@ public class ExploreFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container, false);
         mBinding.setLifecycleOwner(this);
+        mBinding.setRetryRefreshCallBack(mOnRetryRefreshListener);
 
         mRecipeAdapter = new RecipeAdapter(getContext(), mOnRecipeClickListener);
         mBinding.recyclerView.setAdapter(mRecipeAdapter);
@@ -79,7 +84,6 @@ public class ExploreFragment extends Fragment {
         mBinding.dietChoiceSpinner.setAdapter(dietChoiceAdapter);
         mBinding.dietChoiceSpinner.setSelection(0, false);
         mBinding.dietChoiceSpinner.setOnItemSelectedListener(mOnSpinnerSelectedListener);
-        mBinding.errorLayout.retryButton.setOnClickListener((view) -> refreshParams());;
         return mBinding.getRoot();
     }
 
@@ -103,6 +107,22 @@ public class ExploreFragment extends Fragment {
                 .observe(this, recipes -> {
                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                         this.mRecipeAdapter.setRecipes(recipes);
+                    }
+                });
+
+        mViewModel.isErrorLoadingMore.
+                observe(this, isErrorLoadingMore -> {
+                    // Reset existing snackbar
+                    if (mErrorSnackbar != null && mErrorSnackbar.isShown()) {
+                        mErrorSnackbar.dismiss();
+                        mErrorSnackbar = null;
+                    }
+                    // Create new snack bar if error is true
+                    if (isErrorLoadingMore) {
+                        mErrorSnackbar = Snackbar.make(mBinding.recyclerViewWrapper,
+                                mViewModel.errorMsg.getValue(), Snackbar.LENGTH_INDEFINITE);
+                        mErrorSnackbar.setAction(R.string.retry, mOnRetryLoadNextPageListener);
+                        mErrorSnackbar.show();
                     }
                 });
     }
@@ -137,5 +157,14 @@ public class ExploreFragment extends Fragment {
             intent.putExtra(INTENT_KEY_RECIPE, recipe);
             startActivity(intent);
         }
+    };
+
+    private View.OnClickListener mOnRetryRefreshListener = (view) -> {
+        refreshParams();
+    };
+
+    private View.OnClickListener mOnRetryLoadNextPageListener = (view) -> {
+        mViewModel.isErrorLoadingMore.setValue(false);
+        loadNextPage();
     };
 }
