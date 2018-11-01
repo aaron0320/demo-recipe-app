@@ -30,14 +30,15 @@ public class RemoteRecipeDataSource {
         return sInstance;
     }
 
-    public Observable<Response<EdamamSearchResponse>> getRecipes(String query, String time, String diet) {
+    public Observable<Response<EdamamSearchResponse>> getRecipes(String query, String time, String diet, int nextPageStartIndex) {
         return Observable.fromCallable(() ->
                 mEdamamApiService.getRecipes(
                         Config.edamamAppId,
                         Config.edamamAppKey,
                         query,
                         time,
-                        diet)
+                        diet,
+                        nextPageStartIndex)
                         .execute());
     }
 }

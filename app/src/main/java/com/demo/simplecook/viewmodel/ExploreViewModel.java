@@ -29,11 +29,15 @@ public class ExploreViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     public MutableLiveData<Boolean> isError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isLoadingFooter = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isErrorFooter = new MutableLiveData<>();
     public MutableLiveData<String> errorMsg = new MutableLiveData<>();
 
     private MediatorLiveData<List<Recipe>> mRemoteRecipesLiveData = new MediatorLiveData<>();
 
     private LiveData<RecipeResultWrapper> mRemoteRecipesSource;
+
+    private int nextPageStartIndex = 0;
 
     public ExploreViewModel(@NonNull Application application,
                             @NonNull RecipeRepository recipeRepository,
@@ -49,8 +53,11 @@ public class ExploreViewModel extends AndroidViewModel {
 
     public void refreshRemoteRecipes(String query, String time, String diet) {
         // Set Loading and Error to correct values
+        nextPageStartIndex = 0;
         isLoading.setValue(true);
         isError.setValue(false);
+        isLoadingFooter.setValue(false);
+        isErrorFooter.setValue(false);
 
         // Remove old source to avoid memory leak
         if (mRemoteRecipesSource != null) {
@@ -58,22 +65,71 @@ public class ExploreViewModel extends AndroidViewModel {
         }
 
         // Set source from repository
-        mRemoteRecipesSource = mRecipeRepository.getRemoteRecipes(query, time, diet);
+        mRemoteRecipesSource = mRecipeRepository.getRemoteRecipes(query, time, diet, nextPageStartIndex);
         // Listen to source and update live data
         mRemoteRecipesLiveData.addSource(mRemoteRecipesSource, (recipeResultWrapper) -> {
             if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() > 0) {
-                Timber.e("data sucess");
                 isLoading.setValue(false);
                 mRemoteRecipesLiveData.setValue(recipeResultWrapper.getRecipes());
+                nextPageStartIndex = recipeResultWrapper.getLastIndex();
             } else if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() == 0) {
-                Timber.e("data empty");
                 isLoading.setValue(false);
                 isError.setValue(true);
                 errorMsg.setValue(mAppContext.getString(R.string.load_recipe_no_result));
             } else {
-                Timber.e("data failed");
                 isLoading.setValue(false);
                 isError.setValue(true);
+                if (recipeResultWrapper.getCode() == 401) { // API Limit exceeded
+                    errorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_exceed_limit));
+                } else {
+                    errorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_general));
+                }
+            }
+        });
+    }
+
+    public void getNextPageRemoteRecipes(String query, String time, String diet) {
+        // If Loading is in progress, disable getting next page
+        // If Error is showing, disable getting next page, unless user click retry button
+        if (isLoading.getValue() != null && isLoading.getValue() ||
+                isLoadingFooter.getValue() != null && isLoadingFooter.getValue() ||
+                isError.getValue() != null && isError.getValue() ||
+                isErrorFooter.getValue() != null && isErrorFooter.getValue()) {
+            return;
+        }
+
+        // Set Loading and Error to correct values
+        isLoadingFooter.setValue(true);
+        isErrorFooter.setValue(false);
+
+        // Remove old source to avoid memory leak
+        if (mRemoteRecipesSource != null) {
+            mRemoteRecipesLiveData.removeSource(mRemoteRecipesSource);
+        }
+
+        // Set source from repository
+        mRemoteRecipesSource = mRecipeRepository.getRemoteRecipes(query, time, diet, nextPageStartIndex);
+        // Listen to source and update live data
+        mRemoteRecipesLiveData.addSource(mRemoteRecipesSource, (recipeResultWrapper) -> {
+            if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() > 0) {
+                isLoadingFooter.setValue(false);
+
+                // If original LiveData is not null, add new data
+                if (mRemoteRecipesLiveData.getValue() != null) {
+                    Timber.e("Added new values");
+                    recipeResultWrapper.getRecipes().addAll(0, mRemoteRecipesLiveData.getValue());
+                }
+                mRemoteRecipesLiveData.setValue(recipeResultWrapper.getRecipes());
+
+                // Update next page start index
+                nextPageStartIndex = recipeResultWrapper.getLastIndex();
+            } else if (recipeResultWrapper.isSucess() && recipeResultWrapper.getRecipes().size() == 0) {
+                isLoadingFooter.setValue(false);
+                isErrorFooter.setValue(true);
+                errorMsg.setValue(mAppContext.getString(R.string.load_recipe_no_result));
+            } else {
+                isLoadingFooter.setValue(false);
+                isErrorFooter.setValue(true);
                 if (recipeResultWrapper.getCode() == 401) { // API Limit exceeded
                     errorMsg.setValue(mAppContext.getString(R.string.load_recipe_error_exceed_limit));
                 } else {
@@ -86,7 +142,6 @@ public class ExploreViewModel extends AndroidViewModel {
     public LiveData<List<Recipe>> getRemoteRecipes() {
         return mRemoteRecipesLiveData;
     }
-
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         @NonNull

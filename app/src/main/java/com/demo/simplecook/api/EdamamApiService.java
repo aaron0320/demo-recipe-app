@@ -11,6 +11,7 @@ public interface EdamamApiService {
             @Query("app_key") String appKey,
             @Query("q") String query,
             @Query("time") String time,
-            @Query("diet") String diet
+            @Query("diet") String diet,
+            @Query("from") int nextPageStartIndex
     );
 }

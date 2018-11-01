@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 
 import com.demo.simplecook.R;
 import com.demo.simplecook.databinding.FragmentExploreBinding;
-import com.demo.simplecook.model.Recipe;
+import com.demo.simplecook.ui.listener.EndlessRecyclerViewScrollListener;
 import com.demo.simplecook.ui.listener.OnRecipeClickListener;
 import com.demo.simplecook.viewmodel.ExploreViewModel;
 
@@ -20,20 +20,19 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProviders;
-import timber.log.Timber;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.demo.simplecook.ui.RecipeDetailsActivity.INTENT_KEY_RECIPE;
 
 public class ExploreFragment extends Fragment {
     public static final String TAG = ExploreFragment.class.getName();
+    public static final int RECYCLER_VIEW_LOAD_THRESHOLD = 3;
 
     private FragmentExploreBinding mBinding;
     private RecipeAdapter mRecipeAdapter;
 
     private ExploreViewModel mViewModel;
-
-    public ExploreFragment() {
-    }
 
     public static ExploreFragment newInstance() {
         ExploreFragment fragment = new ExploreFragment();
@@ -50,6 +49,15 @@ public class ExploreFragment extends Fragment {
 
         mRecipeAdapter = new RecipeAdapter(getContext(), mOnRecipeClickListener);
         mBinding.recyclerView.setAdapter(mRecipeAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mBinding.recyclerView.setLayoutManager(linearLayoutManager);
+        mBinding.recyclerView.setOnScrollListener(
+                new EndlessRecyclerViewScrollListener(linearLayoutManager, RECYCLER_VIEW_LOAD_THRESHOLD) {
+            @Override
+            public void onRequestLoadMore() {
+                loadNextPage();
+            }
+        });
 
         ArrayAdapter<CharSequence> foodChoiceAdapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.food_choice_array, R.layout.spinner_item_simple_cook);
@@ -71,8 +79,7 @@ public class ExploreFragment extends Fragment {
         mBinding.dietChoiceSpinner.setAdapter(dietChoiceAdapter);
         mBinding.dietChoiceSpinner.setSelection(0, false);
         mBinding.dietChoiceSpinner.setOnItemSelectedListener(mOnSpinnerSelectedListener);
-
-        mBinding.errorLayout.retryButton.setOnClickListener((view) -> refreshUI());;
+        mBinding.errorLayout.retryButton.setOnClickListener((view) -> refreshParams());;
         return mBinding.getRoot();
     }
 
@@ -100,8 +107,14 @@ public class ExploreFragment extends Fragment {
                 });
     }
 
-    private void refreshUI() {
+    private void refreshParams() {
         mViewModel.refreshRemoteRecipes(mBinding.foodChoiceSpinner.getSelectedItem().toString(),
+                mBinding.prepTimeChoiceSpinner.getSelectedItem().toString(),
+                mBinding.dietChoiceSpinner.getSelectedItem().toString());
+    }
+
+    private void loadNextPage() {
+        mViewModel.getNextPageRemoteRecipes(mBinding.foodChoiceSpinner.getSelectedItem().toString(),
                 mBinding.prepTimeChoiceSpinner.getSelectedItem().toString(),
                 mBinding.dietChoiceSpinner.getSelectedItem().toString());
     }
@@ -110,7 +123,7 @@ public class ExploreFragment extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                refreshUI();
+                refreshParams();
             }
         }
 
@@ -119,10 +132,10 @@ public class ExploreFragment extends Fragment {
     };
 
     private OnRecipeClickListener mOnRecipeClickListener = recipe -> {
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
-                intent.putExtra(INTENT_KEY_RECIPE, recipe);
-                startActivity(intent);
-            }
-        };
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+            Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+            intent.putExtra(INTENT_KEY_RECIPE, recipe);
+            startActivity(intent);
+        }
+    };
 }

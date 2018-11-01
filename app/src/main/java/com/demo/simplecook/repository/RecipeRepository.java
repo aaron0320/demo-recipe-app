@@ -18,6 +18,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.demo.simplecook.repository.RecipeResultWrapper.INVALID_CODE;
+import static com.demo.simplecook.repository.RecipeResultWrapper.INVALID_LAST_INDEX;
 
 public class RecipeRepository {
     private static RecipeRepository sInstance;
@@ -45,11 +46,12 @@ public class RecipeRepository {
         return sInstance;
     }
 
-    public LiveData<RecipeResultWrapper> getRemoteRecipes(String query, String time, String diet) {
+    public LiveData<RecipeResultWrapper> getRemoteRecipes(String query, String time, String diet, int nextPageStartIndex) {
         MutableLiveData<RecipeResultWrapper> remoteRecipes = new MutableLiveData<>();
         // XXX - Consider returning the disposable to ViewModel
         // In case when the MediatorLiveData remove this from the source, we can dispose this
-        Disposable disposable = mRemoteRecipeDataSource.getRecipes(query, time, diet)
+        Timber.e("getRemoteRecipes startIndex %d", nextPageStartIndex);
+        Disposable disposable = mRemoteRecipeDataSource.getRecipes(query, time, diet, nextPageStartIndex)
             .subscribeOn(Schedulers.io())
             .subscribe((response) -> {
                 if (response.isSuccessful() && response.body().getHits() != null) {
@@ -60,12 +62,12 @@ public class RecipeRepository {
                             recipes.add(hit.getEdamamRecipe());
                         }
                     }
-                    remoteRecipes.postValue(new RecipeResultWrapper(recipes, true, response.code(), null));
+                    remoteRecipes.postValue(new RecipeResultWrapper(recipes, true, response.code(), null, response.body().getTo()));
                 } else {
-                    remoteRecipes.postValue(new RecipeResultWrapper(null, false, response.code(), response.message()));
+                    remoteRecipes.postValue(new RecipeResultWrapper(null, false, response.code(), response.message(), INVALID_LAST_INDEX));
                 }
             },(throwable) -> {
-                remoteRecipes.postValue(new RecipeResultWrapper(null, false, INVALID_CODE, throwable.getMessage()));
+                remoteRecipes.postValue(new RecipeResultWrapper(null, false, INVALID_CODE, throwable.getMessage(), INVALID_LAST_INDEX));
         });
         return remoteRecipes;
     }

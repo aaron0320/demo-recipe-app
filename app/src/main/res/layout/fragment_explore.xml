@@ -95,7 +95,6 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_below="@id/options"
-            app:layoutManager="LinearLayoutManager"
             tools:context=".ui.RecipeAdapter"
             tools:listitem="@layout/item_recipe"
             android:visibility="@{ !viewModel.isLoading &amp;&amp; !viewModel.isError ? View.VISIBLE : View.GONE }"/>
