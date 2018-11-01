@@ -6,6 +6,7 @@ import android.util.Log;
 import com.demo.simplecook.api.EdamamApiService;
 import com.demo.simplecook.api.EdamamRetrofitClient;
 import com.demo.simplecook.db.AppDataBase;
+import com.demo.simplecook.helper.ImageHelper;
 import com.demo.simplecook.repository.LocalRecipeDataSource;
 import com.demo.simplecook.repository.RecipeRepository;
 import com.demo.simplecook.repository.RemoteRecipeDataSource;
@@ -37,6 +38,10 @@ public class SimpleCookApp extends Application {
 
     public AppDataBase getAppDataBase() {
         return AppDataBase.getInstance(this);
+    }
+
+    public ImageHelper getImageHelper() {
+        return ImageHelper.getInstance();
     }
 
     /**

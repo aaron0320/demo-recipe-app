@@ -49,4 +49,11 @@ public class LocalRecipeDataSource {
             return true;
         });
     }
+
+    public Observable<Boolean> dropAllRecipes() {
+        return Observable.fromCallable(() -> {
+            mAppDataBase.recipeDao().dropAllRecipes();
+            return true;
+        });
+    }
 }

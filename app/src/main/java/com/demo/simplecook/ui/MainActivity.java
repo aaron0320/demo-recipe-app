@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int NUM_DRAWER_PAGER_ITEMS = 3;
 
     private ActivityMainBinding mBinding;
 
@@ -30,24 +31,6 @@ public class MainActivity extends AppCompatActivity {
         mBinding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mBinding.navViewPager.setAdapter(new NavPagerAdapter(getSupportFragmentManager()));
         mBinding.navViewPager.addOnPageChangeListener(mOnPageChangeListener);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     // XXX - Find a better way to bind the two listeners below
@@ -64,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     mBinding.navigation.setSelectedItemId(R.id.nav_saved);
                     break;
+                case 2:
+                    mBinding.navigation.setSelectedItemId(R.id.nav_settings);
+                    break;
                 default:
                     throw new IllegalArgumentException("Fragment position item not found");
             }
@@ -74,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     };
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
@@ -84,14 +69,15 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_saved:
                     mBinding.navViewPager.setCurrentItem(1);
                     return true;
+                case R.id.nav_settings:
+                    mBinding.navViewPager.setCurrentItem(2);
+                    return true;
             }
             return false;
         }
     };
 
     private static class NavPagerAdapter extends FragmentPagerAdapter {
-        private final int NUM_DRAWER_PAGER_ITEMS = 2;
-
         public NavPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -103,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
                     return ExploreFragment.newInstance();
                 case 1:
                     return SavedFragment.newInstance(2);
+                case 2:
+                    return SettingsFragment.newInstance();
                 default:
                     throw new IllegalArgumentException("Fragment position item not found");
             }

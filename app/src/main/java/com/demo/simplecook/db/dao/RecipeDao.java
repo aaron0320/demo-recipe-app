@@ -17,7 +17,7 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipes")
     LiveData<List<Recipe>> getAllRecipes();
 
-    @Query("SELECT * FROM recipes where webUrl = :webUrl")
+    @Query("SELECT * FROM recipes WHERE webUrl = :webUrl")
     LiveData<Recipe> getRecipe(String webUrl);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -29,4 +29,6 @@ public interface RecipeDao {
     @Delete
     void deleteRecipe(Recipe recipe);
 
+    @Query("DELETE FROM recipes")
+    void dropAllRecipes();
 }

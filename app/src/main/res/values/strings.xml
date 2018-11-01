@@ -18,7 +18,7 @@
     <string name="time_needed">%d Min</string>
 
     <string name="title_activity_recipe_details">Recipe Details</string>
-    <string name="nutrient_info_title">Daily Nutrient % (per serve)</string>
+    <string name="nutrient_info_title">Daily Nutrient % (per serve):</string>
     <string name="nutrient_energy">Energy: %d%%</string>
     <string name="nutrient_fat">Fat: %d%%</string>
     <string name="nutrient_carbo">Carbohydrate: %d%%</string>
@@ -27,11 +27,19 @@
     <string name="nutrient_protein">Protein: %d%%</string>
     <string name="nutrient_cholesterol">Cholesterol: %d%%</string>
     <string name="nutrient_sodium">Sodium: %d%%</string>
-    <string name="ingredient_info_title">Ingredients (serve size: %.1f)</string>
-    <string name="details_title">Details</string>
+    <string name="ingredient_info_title">Ingredients (serve size: %.1f):</string>
+    <string name="details_title">Details:</string>
     <string name="save_recipe_success">Save success!</string>
     <string name="save_recipe_failed">Save failed, please retry</string>
     <string name="delete_recipe_success">Delete success!</string>
     <string name="delete_recipe_failed">Delete failed, please retry</string>
+
+    <string name="button_drop_local_recipes">Clear saved recipes</string>
+    <string name="drop_local_recipes_success">Clear success!</string>
+    <string name="drop_local_recipes_failed">Clear failed, please retry</string>
+    <string name="button_clear_disk_cache">Clear disk cache</string>
+    <string name="clear_disk_cache_success">Clear success!</string>
+    <string name="clear_disk_cache_failed">Clear failed, please retry</string>
+
 
 </resources>

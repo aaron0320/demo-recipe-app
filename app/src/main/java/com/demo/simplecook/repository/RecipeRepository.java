@@ -101,4 +101,15 @@ public class RecipeRepository {
         return deleteResult;
     }
 
+    public LiveData<Boolean> dropAllLocalRecipes() {
+        MutableLiveData<Boolean> dropResult = new MutableLiveData<>();
+        Disposable disposable = mLocalRecipeDataSource.dropAllRecipes()
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        response -> dropResult.postValue(response),
+                        throwable -> dropResult.postValue(false)
+                );
+        return dropResult;
+    }
+
 }

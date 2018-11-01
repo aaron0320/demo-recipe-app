@@ -29,5 +29,4 @@ public class RecipeDetailsViewModel extends AndroidViewModel {
     public LiveData<Boolean> deleteLocalRecipe(Recipe recipe) {
         return mRecipeRepository.deleteLocalRecipe(recipe);
     }
-
 }
